@@ -4,17 +4,17 @@
 電源として+3.3Vが必要です。  
   
 ## 接続
-PIC16F18313   - ILI9341(SPI)  
+PIC16F18313 　---　 ILI9341(SPI)  
 1 VDD +3.3V  
 2 RA5(LEFT button)  
-3 RA4         - RESET  
+3 RA4　　　　　--- 　RESET  
 4 MCLR(RA3/RIGHT button)  
-5 RA2         - DC  
-6 RA1(ICSPCLK)- SCK  
-7 RA0(ICSBDAT)- SDI(MOSI)  
+5 RA2 　　　　--- 　DC  
+6 RA1(ICSPCLK)　--- 　SCK  
+7 RA0(ICSBDAT)　--- 　SDI(MOSI)  
 8 VSS (GND)  
-                CS -> GND  
-                SDO(MISO) -> (NC)  
+　　　　　　　　　　　CS -> GND  
+　　　　　　　　　　　SDO(MISO) -> (NC)  
   
 ## 遊び方
 ファイルbreakout.hexをPICkitなどでPICマイコンに書き込んだ後、電源オンで起動します。  
