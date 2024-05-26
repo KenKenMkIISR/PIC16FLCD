@@ -64,12 +64,12 @@ void PIN_MANAGER_Initialize(void)
     /**
     ANSELx registers
     */   
-    ANSELA = 0x00;
+    ANSELA = 0x20;
 
     /**
     WPUx registers
     */ 
-    WPUA = 0x28;
+    WPUA = 0x08;
 
     /**
     ODx registers

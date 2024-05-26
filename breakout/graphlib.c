@@ -1,5 +1,4 @@
 #include "ili9341driver.h"
-
 const unsigned char FontData[]={
 //フォントデータ、キャラクタコード順に8バイトずつ、上位ビットが左
 //'0'-'Z'
@@ -49,7 +48,6 @@ const unsigned char FontData[]={
 	0xFE,0x06,0x0C,0x38,0x60,0xC0,0xFE,0x00
 */
 };
-
 void g_pset(int x,int y,uint16_t c)
 // (x,y)の位置にカラーcで点を描画
 {

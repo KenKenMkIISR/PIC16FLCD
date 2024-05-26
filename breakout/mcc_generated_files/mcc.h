@@ -50,6 +50,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "interrupt_manager.h"
+#include "adc.h"
 #include "spi1.h"
 #include "tmr0.h"
 

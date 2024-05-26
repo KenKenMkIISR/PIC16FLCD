@@ -1,11 +1,11 @@
-// Break out game for PIC16F18313 + ILI9341 QVGA LCD (SPI) ball_y K.Tanaka
+// Break out game (analog version) for PIC16F18313 + ILI9341 QVGA LCD (SPI) ball_y K.Tanaka
 
 /*
  * PIC16F18313   - ILI9341(SPI)
  * 1 VDD +3.3V
- * 2 RA5(LEFT)
+ * 2 RA5(ANALOG)
  * 3 RA4         - RESET
- * 4 MCLR(RA3/RIGHT)
+ * 4 MCLR(RA3/START)
  * 5 RA2         - DC
  * 6 RA1(ICSPCLK)- SCK
  * 7 RA0(ICSBDAT)- SDI(MOSI)
@@ -70,12 +70,9 @@ void putballpad(void){
 	g_circlefill((uint16_t)ball_x,ball_y,BALLSIZE-1,COLOR7);
 	g_boxfill(padx,PAD_Y,padx+PADSIZE-1,PAD_Y+4,COLOR5);
 }
-// Erase ball
-void eraseball(void){
+// Erase ball and pad
+void eraseballpad(void){
 	g_circlefill((uint16_t)ball_x,ball_y,BALLSIZE-1,COLOR0);
-}
-// Erase pad
-void erasepad(void){
 	g_boxfill(padx,PAD_Y,padx+PADSIZE-1,PAD_Y+4,COLOR0);
 }
 
@@ -128,15 +125,17 @@ void main(void)
 			putblock(i+WALL,BLOCKY2,COLOR4);
 			putblock(i+WALL,BLOCKY3,COLOR6);
 		}
-		// wait for any button pressed
-		while(!(~PORTA & 0x28)){
+		// wait for start button pressed
+		while(!(~PORTA & 0x08)){
 			random();
 			delayms(17);
 		}
 		// inside of a stage loop
 		while(num){
-			padx=X_RES/2-PADSIZE/2;
-			ball_x=X_RES/2;
+			padx=ADRESH; // analog read (upper 8bit)
+			if(padx<WALL) padx=WALL;
+			else if(padx+PADSIZE>X_RES-WALL) padx=X_RES-WALL-PADSIZE;
+			ball_x=padx+PADSIZE/2;
 			ball_y=PAD_Y-BALLSIZE;
 
 			//ball_vx=(random()&3)*3-4;
@@ -149,31 +148,16 @@ void main(void)
 			else ball_vy=-4;
 
 			putballpad();
-			// wait until buttons are released
-			while(~PORTA & 0x28){
-				random();
-				delayms(17);
-			}
+
 			// game's main loop
 			while(1){
 				putballpad();
 				delayms(17);
-				eraseball();
-				//erasepad();
-				g_boxfill(padx,PAD_Y,padx+3,PAD_Y+4,COLOR0);
-				g_boxfill(padx+PADSIZE-4,PAD_Y,padx+PADSIZE-1,PAD_Y+4,COLOR0);
-				//left button check
-				if((PORTA & 0x20)==0){
-					random();
-					padx-=4;
-					if(padx<WALL) padx=WALL;
-				}
-				//right button check
-				if((PORTA & 0x08)==0){
-					random();
-					padx+=4;
-					if(padx+PADSIZE>X_RES-WALL) padx=X_RES-WALL-PADSIZE;
-				}
+				eraseballpad();
+				//move pad
+				padx=ADRESH; // analog read (upper 8bit)
+				if(padx<WALL) padx=WALL;
+				else if(padx+PADSIZE>X_RES-WALL) padx=X_RES-WALL-PADSIZE;
 				// move ball
 				ball_x+=(uint8_t)ball_vx;
 				ball_y+=ball_vy;
@@ -186,8 +170,7 @@ void main(void)
 						// missed
 						putballpad(); // show ball and pad again
 						delayms(2000);
-						eraseball();
-						erasepad();
+						eraseballpad();
 						break; // return to a stage loop
 					}
 					if(y>PAD_Y && ball_x+4>=padx && ball_x-4<padx+PADSIZE){
