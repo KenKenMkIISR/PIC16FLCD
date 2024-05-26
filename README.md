@@ -4,18 +4,8 @@
 電源として+3.3Vが必要です。  
 AD変換を利用して可変抵抗の値を読み込みます。  
   
-## 接続
-PIC16F18313   - ILI9341(SPI)  
-1 VDD +3.3V  
-2 RA5(ANALOG)  
-3 RA4         - RESET  
-4 MCLR(RA3/START button)  
-5 RA2         - DC  
-6 RA1(ICSPCLK)- SCK  
-7 RA0(ICSBDAT)- SDI(MOSI)  
-8 VSS (GND)  
-                CS -> GND  
-                SDO(MISO) -> (NC)  
+## 回路図
+![](schematic.png)  
   
 ## 遊び方
 ファイルbreakout.hexをPICkitなどでPICマイコンに書き込んだ後、電源オンで起動します。  
@@ -29,4 +19,3 @@ STARTボタンを押すとゲームがスタートします。
 プログラム作成にはMicrochip Code Configulatorを利用しました。ビルドには不要です。  
   
 ![](breakout.jpg)  
-
